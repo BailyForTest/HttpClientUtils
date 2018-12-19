@@ -1,13 +1,9 @@
 package com.dingdong.utils;
 
-
-
 import com.dingdong.common.HttpClientReponse;
 import com.dingdong.common.HttpClientRequest;
-import com.dingdong.common.JsonObject;
-import jdk.nashorn.internal.parser.JSONParser;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -20,19 +16,21 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.util.EntityUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
+
 
 public class HttpClientUtil {
     private CloseableHttpClient httpClient;
     private static Logger logger =  Logger.getLogger(HttpClientUtil.class);
 
+    //GET请求体
     public static  HttpClientReponse doGet(HttpClientRequest httpClientReques){
         HttpClientUtil httpClientUtil = new HttpClientUtil();
         httpClientUtil.init();
@@ -40,6 +38,7 @@ public class HttpClientUtil {
         return  httpClientUtil.sendRequest(httpGet,httpClientReques);
     }
 
+    //POST请求体
     public static  HttpClientReponse doPost(HttpClientRequest httpClientReques){
         HttpClientUtil httpClientUtil = new HttpClientUtil();
         httpClientUtil.init();
@@ -47,6 +46,7 @@ public class HttpClientUtil {
         return  httpClientUtil.sendRequest(httpPost,httpClientReques);
     }
 
+    //Delete请求体
     public static  HttpClientReponse doDelete(HttpClientRequest httpClientReques){
         HttpClientUtil httpClientUtil = new HttpClientUtil();
         httpClientUtil.init();
@@ -54,6 +54,7 @@ public class HttpClientUtil {
         return  httpClientUtil.sendRequest(httpDelete,httpClientReques);
     }
 
+    //Delete请求体
     public static  HttpClientReponse doPut(HttpClientRequest httpClientReques){
         HttpClientUtil httpClientUtil = new HttpClientUtil();
         httpClientUtil.init();
@@ -61,16 +62,19 @@ public class HttpClientUtil {
         return  httpClientUtil.sendRequest(httpPut,httpClientReques);
     }
 
+    //HTTP连接
     private void init(){
          httpClient = HttpClientBuilder.create().build();
          logger.info("Start init http connection.");
     }
 
+    //发送request请求
     private HttpClientReponse sendRequest(HttpRequestBase httpRequestBase, HttpClientRequest httpClientRequest){
         HttpClientReponse httpClientReponse = new HttpClientReponse();
         String url = httpClientRequest.getUrl();
         String encodingOfBody = "ISO-8859-1";
 
+        //请求Headers
         Map<String, String> requestHeaders = httpClientRequest.getHeaders();
         for (String key : requestHeaders.keySet()) {
             httpRequestBase.setHeader(key, requestHeaders.get(key));
@@ -82,6 +86,8 @@ public class HttpClientUtil {
             }
         }
 
+
+        //编码格式
         try {
             if(httpRequestBase instanceof  HttpEntityEnclosingRequestBase){
                 ((HttpEntityEnclosingRequestBase)httpRequestBase).setEntity(new StringEntity(httpClientRequest.getBody()));
@@ -91,6 +97,8 @@ public class HttpClientUtil {
             logger.error(e.getMessage());
         }
 
+
+        //Response返回值处理
         try {
             CloseableHttpResponse response = httpClient.execute(httpRequestBase);
             String statusCode = response.getStatusLine().toString().split(" ")[1];
@@ -108,8 +116,6 @@ public class HttpClientUtil {
 
             HttpEntity entity = response.getEntity();
             String body = IOUtils.toString(entity.getContent());
-            JsonObject test = new JsonObject();
-            test.GetJsonObject(body);
             logger.info(body);
 
             httpClientReponse.setBody(body);
@@ -124,9 +130,7 @@ public class HttpClientUtil {
         return httpClientReponse;
     }
 
-
-
-
+    //关闭HTTP连接
     private void close(){
         try {
             httpClient.close();

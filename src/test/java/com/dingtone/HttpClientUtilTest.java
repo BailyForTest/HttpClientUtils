@@ -3,34 +3,74 @@ package com.dingtone;
 import com.dingdong.common.HttpClientReponse;
 import com.dingdong.common.HttpClientRequest;
 import com.dingdong.utils.HttpClientUtil;
+
+import com.dingdong.utils.TestData;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.log4testng.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class HttpClientUtilTest {
+
+public class HttpClientUtilTest extends TestData {
     private static Logger logger = Logger.getLogger(HttpClientUtilTest.class);
 
-    @Test(testName = "非一键完善信息用户")
-    public  void test1(){
-        HttpClientRequest request = new HttpClientRequest();
-        request.setUrl("http://54.241.20.16:8080/dummy/v1/isDummy?trackCode=0");
-
-        Map<String,String> requestHeader =new HashMap<String, String>();
-        requestHeader.put("X-G-TOKEN","0");
-        requestHeader.put("Content-Type","application/json");
-        //requestHeader.put("name2","value2");
-        request.setHeaders(requestHeader);
-        request.setBody("{\"insId\": \"9504864908\"}");
-
-        HttpClientReponse reponse =  HttpClientUtil.doPost(request);
-        Assert.assertEquals("200",reponse.getStatusCode());
-    }
     @Test
-    public  void test2(){
+    public void test1() {
+        if (TestData.initTestData(2)) {
+            HttpClientRequest request = new HttpClientRequest();
 
+            request.setUrl(TestData.TestIP + TestData.V1_isDummy +"trackCode=0");
+            //request.setUrl("http://54.241.20.16:8080/dummy/v1/isDummy?trackCode=0");
+
+
+            Map<String, String> requestHeader = new HashMap<String, String>();
+            requestHeader.put("X-G-TOKEN", "0");
+            requestHeader.put("Content-Type", "application/json");
+            request.setHeaders(requestHeader);
+
+            request.setBody("{\"insId\": \"9504864908\"}");
+
+            HttpClientReponse reponse = HttpClientUtil.doPost(request);
+
+            JSONObject jsonObject = new JSONObject(reponse.getBody());
+
+            System.out.println(jsonObject.getInt("Result"));
+            System.out.println(jsonObject.getString("Message"));
+            System.out.println(jsonObject.getJSONObject("data"));
+            JSONObject data1 = jsonObject.getJSONObject("data");
+            System.out.println(data1.getInt("isBind"));
+
+            System.out.println(jsonObject.getLong("ServerTime"));
+
+            Assert.assertEquals("200", reponse.getStatusCode());
+
+        }
     }
-}
+
+    @Test
+    public void test2(){
+        if(TestData.initTestData(2)){
+            HttpClientRequest request = new HttpClientRequest();
+            request.setUrl("http://54.241.20.16:8080/dummy/v1/isDummy");
+
+            Map<String, String> requestHeader = new HashMap<String, String>();
+            requestHeader.put("X-G-TOKEN", "0");
+            requestHeader.put("Content-Type", "application/json");
+            request.setHeaders(requestHeader);
+
+            request.setBody("");
+
+            HttpClientReponse reponse = HttpClientUtil.doPost(request);
+            Assert.assertEquals("200", reponse.getStatusCode());
+        }
+    }
+    }
 

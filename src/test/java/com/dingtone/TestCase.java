@@ -1,9 +1,17 @@
 package com.dingtone;
 
+import com.dingdong.common.HttpClientReponse;
+import com.dingdong.common.HttpClientRequest;
+import com.dingdong.utils.HttpClientUtil;
+import com.dingdong.utils.TestData;
+import org.testng.Assert;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestCase {
     @DataProvider(name = "params")
@@ -34,5 +42,25 @@ public class TestCase {
     public void test1(){
         System.out.println("this test1");
     }
+    @Test(groups = "test2")
+    public void test2(){
+        if (TestData.initTestData(2)) {
+            HttpClientRequest request = new HttpClientRequest();
 
+            //request.setUrl(TestData.TestIP + TestData.V1_isDummy +"trackCode=0");
+            request.setUrl("http://54.241.20.16:8080/dummy/v1/isDummy");
+
+
+            Map<String, String> requestHeader = new HashMap<String, String>();
+            requestHeader.put("X-G-TOKEN", "0");
+            requestHeader.put("Content-Type", "application/json");
+            request.setHeaders(requestHeader);
+
+            request.setBody("{\"insId\": \"9504864908\"}");
+
+            HttpClientReponse reponse = HttpClientUtil.doPost(request);
+            Assert.assertEquals("200", reponse.getStatusCode());
+
+        }
+    }
 }

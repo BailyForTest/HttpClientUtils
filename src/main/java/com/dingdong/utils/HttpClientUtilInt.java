@@ -3,14 +3,12 @@ package com.dingdong.utils;
 import com.dingdong.common.HttpClientReponse;
 import com.dingdong.common.HttpClientRequest;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
@@ -24,10 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 
 public class HttpClientUtilInt {
 
@@ -39,6 +36,16 @@ public class HttpClientUtilInt {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         String url = request.getUrl();
         HttpUriRequest post = new HttpPost(url);
+
+        List<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+        valuePairs.add(new BasicNameValuePair("trackCode","0"));
+
+        try {
+            ((HttpPost) post).setEntity(new UrlEncodedFormEntity(valuePairs,"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
 
         Map<String, String> requestHeaders = request.getHeaders();
         for (String key : requestHeaders.keySet()) {
@@ -80,4 +87,5 @@ public class HttpClientUtilInt {
         }
         return httpClientReponse;
     }
+
 }

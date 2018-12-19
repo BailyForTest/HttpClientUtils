@@ -1,7 +1,10 @@
 package com.dingdong.common;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class HttpClientRequest {
@@ -9,7 +12,7 @@ public class HttpClientRequest {
 
     private HttpUriRequest httpMethod;
 
-    private Map<String,String> Paramter;
+    private ArrayList<NameValuePair> paris;
 
     private Map<String,String> headers;
 
@@ -23,8 +26,8 @@ public class HttpClientRequest {
         return httpMethod;
     }
 
-    public Map<String, String> getParamter() {
-        return Paramter;
+    public  ArrayList<NameValuePair> getParis() {
+        return paris;
     }
 
     public Map<String, String> getHeaders() {
@@ -43,8 +46,8 @@ public class HttpClientRequest {
         this.httpMethod = httpMethod;
     }
 
-    public void setParamter(Map<String, String> paramter) {
-        this.Paramter = paramter;
+    public void setParis( ArrayList<NameValuePair> paris) {
+        this.paris = paris;
     }
 
     public void setHeaders(Map<String, String> headers) {
