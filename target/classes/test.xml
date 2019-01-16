@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<suite name="parameter">
+    <test name="test1">
+        <classes>
+            <class name="com.dingtone.testcase.zf_web_dn.TaskPullTest"/>
+        </classes>
+    </test>
+</suite>

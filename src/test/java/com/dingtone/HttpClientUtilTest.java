@@ -1,21 +1,17 @@
 package com.dingtone;
 
-import com.dingdong.common.HttpClientReponse;
-import com.dingdong.common.HttpClientRequest;
-import com.dingdong.utils.HttpClientUtil;
+import com.dingtone.common.HttpClientReponse;
+import com.dingtone.common.HttpClientRequest;
+import com.dingtone.utils.HttpClientUtil;
 
-import com.dingdong.utils.TestData;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.dingtone.utils.TestData;
 
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.log4testng.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
